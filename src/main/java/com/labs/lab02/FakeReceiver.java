@@ -6,6 +6,7 @@ import com.labs.lab02.interfaces.Receiver;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -28,6 +29,11 @@ public class FakeReceiver extends Thread implements Receiver {
         System.out.println("--- RECEIVED NEW MESSAGE ---");
         Packet packet = generator.generatePacket();
         return coder.encode(packet);
+    }
+
+    @Override
+    public Packet receiveMessagePacket() throws NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException, IOException {
+        return null;
     }
 
     @Override

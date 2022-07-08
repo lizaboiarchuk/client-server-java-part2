@@ -2,10 +2,12 @@ package com.labs.lab02;
 
 import com.labs.lab02.interfaces.Sender;
 import com.labs.lab02.packet.Message;
+import com.labs.lab02.packet.Packet;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.net.InetAddress;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Queue;
@@ -26,8 +28,12 @@ public class FakeSender extends Thread implements Sender {
 
     @Override
     public void sendMessage(byte[] message) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
-        Message m = decryptor.decode(message);
-        System.out.println(m.getMessageString());
+        Packet m = decryptor.decode(message);
+        System.out.println(m.getMessage().getMessageString());
+    }
+
+    @Override
+    public void sendMessage(byte[] message, InetAddress target) throws IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
     }
 
     @Override

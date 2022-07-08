@@ -6,10 +6,10 @@ import java.security.NoSuchAlgorithmException;
 public class Main
 {
     public static void main( String[] args ) throws NoSuchPaddingException, NoSuchAlgorithmException {
+        MessageEncryptor encoder = new MessageEncryptor();
         FakeReceiver receiver = new FakeReceiver();
         MessageDecryptor decoder = new MessageDecryptor();
         FakeProcessor processor = new FakeProcessor();
-        MessageEncryptor encoder = new MessageEncryptor();
         FakeSender sender = new FakeSender();
     }
 }

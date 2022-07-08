@@ -1,5 +1,7 @@
-package com.labs.lab02;
+package com.labs.lab02.UDP;
 
+import com.labs.lab02.FakeProcessor;
+import com.labs.lab02.MessageEncryptor;
 import com.labs.lab02.interfaces.Processor;
 import com.labs.lab02.packet.Message;
 import com.labs.lab02.packet.Packet;
@@ -8,13 +10,13 @@ import java.nio.charset.StandardCharsets;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-public class FakeProcessor extends Thread implements Processor {
+public class UDPProcessor extends Thread implements Processor {
 
     public static Queue<Message> messagesQueue;
 
-    public enum Responce { OK, NOT_OK }
+    enum Responce { OK, NOT_OK }
 
-    public FakeProcessor() {
+    public UDPProcessor() {
         super("FakeProcessor");
         messagesQueue = new ConcurrentLinkedDeque<>();
         start();
@@ -24,30 +26,30 @@ public class FakeProcessor extends Thread implements Processor {
         messagesQueue.add(m);
     }
 
-    private Responce get_product_total_number(Message message) {
+    private FakeProcessor.Responce get_product_total_number(Message message) {
         System.out.println("GETTING PRODUCT TOTAL NUMBER...");
-        return Responce.OK;
+        return FakeProcessor.Responce.OK;
     }
 
-    private Responce subtract_product(Message message) {
+    private FakeProcessor.Responce subtract_product(Message message) {
         System.out.println("SUBTRACTING PRODUCT...");
-        return Responce.OK;
+        return FakeProcessor.Responce.OK;
     }
-    private Responce add_product(Message message) {
+    private FakeProcessor.Responce add_product(Message message) {
         System.out.println("ADDING PRODUCT...");
-        return Responce.OK;
+        return FakeProcessor.Responce.OK;
     }
-    private Responce add_product_group(Message message) {
+    private FakeProcessor.Responce add_product_group(Message message) {
         System.out.println("ADDING PRODUCT GROUP...");
-        return Responce.OK;
+        return FakeProcessor.Responce.OK;
     }
-    private Responce add_title_to_product_group(Message message) {
+    private FakeProcessor.Responce add_title_to_product_group(Message message) {
         System.out.println("ADDING TITLE TO PRODUCT GROUP...");
-        return Responce.OK;
+        return FakeProcessor.Responce.OK;
     }
-    private Responce set_product_price(Message message) {
+    private FakeProcessor.Responce set_product_price(Message message) {
         System.out.println("SETTING PRODUCT PRICE...");
-        return Responce.OK;
+        return FakeProcessor.Responce.OK;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class FakeProcessor extends Thread implements Processor {
 
         int cType = message.getcType();
         Message.cType commandName = Message.cType.values()[cType];
-        Responce responce = Responce.NOT_OK;
+        FakeProcessor.Responce responce = FakeProcessor.Responce.NOT_OK;
 
         switch (commandName) {
             case GET_PRODUCT_TOTAL_NUMBER: responce = get_product_total_number(message); break;
@@ -79,7 +81,7 @@ public class FakeProcessor extends Thread implements Processor {
                 if (message != null) {
                     Packet res = process(message);
                     System.out.println("Processed message " + message);
-                    MessageEncryptor.queue_accept(res);
+                    UDPEncryptor.queue_accept(res);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         }

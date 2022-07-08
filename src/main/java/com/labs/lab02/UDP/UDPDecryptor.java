@@ -1,8 +1,8 @@
-package com.labs.lab02;
+package com.labs.lab02.UDP;
 
+import com.labs.lab02.interfaces.Decryptor;
 import com.labs.lab02.packet.CRC16;
 import com.labs.lab02.packet.Message;
-import com.labs.lab02.interfaces.Decryptor;
 import com.labs.lab02.packet.Packet;
 
 import javax.crypto.*;
@@ -15,8 +15,7 @@ import java.util.Arrays;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-
-public class MessageDecryptor extends Thread implements Decryptor {
+public class UDPDecryptor extends Thread implements Decryptor {
 
     public static Queue<byte[]> messageQueue;
     private static final String ENCRYPTION_STRING_KEY = "encryptkeystring";
@@ -26,7 +25,7 @@ public class MessageDecryptor extends Thread implements Decryptor {
     private static Cipher cipher;
 
 
-    public MessageDecryptor() throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public UDPDecryptor() throws NoSuchPaddingException, NoSuchAlgorithmException {
         super("MessageDecryptor");
         messageQueue = new ConcurrentLinkedDeque<>();
         start();
@@ -38,7 +37,7 @@ public class MessageDecryptor extends Thread implements Decryptor {
     public static void queue_accept(byte[] m){ messageQueue.add(m); }
 
     @Override
-    public Packet decode(byte[] bytes) throws  BadPaddingException,  IllegalBlockSizeException, InvalidKeyException {
+    public Packet decode(byte[] bytes) throws BadPaddingException, IllegalBlockSizeException, InvalidKeyException {
         ByteBuffer buffer = ByteBuffer.wrap(bytes).order(ByteOrder.BIG_ENDIAN);
         if (buffer.get() != START_BYTE) { throw new IllegalArgumentException("Invalid start byte :( "); }
 
@@ -84,9 +83,10 @@ public class MessageDecryptor extends Thread implements Decryptor {
                 if (message != null) {
                     Packet result = decode(message);
                     System.out.println("Decoded " + result);
-                    FakeProcessor.queue_accept(result.getMessage());
+                    UDPProcessor.queue_accept(result.getMessage());
                 }
             } catch (Exception e) { e.printStackTrace(); }
         }
     }
 }
+

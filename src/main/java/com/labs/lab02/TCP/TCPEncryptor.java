@@ -1,4 +1,4 @@
-package com.labs.lab02;
+package com.labs.lab02.TCP;
 
 import com.labs.lab02.packet.CRC16;
 import com.labs.lab02.packet.Message;
@@ -15,7 +15,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 
-public class MessageEncryptor extends Thread implements Encryptor {
+public class TCPEncryptor extends Thread implements Encryptor {
     public static Queue<Packet> packetQueue;
     private static final String ENCRYPTION_STRING_KEY = "encryptkeystring";
     private static final byte START_BYTE = 0x13;
@@ -24,14 +24,13 @@ public class MessageEncryptor extends Thread implements Encryptor {
     private static Cipher cipher;
 
 
-    public MessageEncryptor() throws NoSuchPaddingException, NoSuchAlgorithmException {
+    public TCPEncryptor() throws NoSuchPaddingException, NoSuchAlgorithmException {
         super("MessageEncryptor");
-        packetQueue =new ConcurrentLinkedDeque<>();
-        start();
         byte[] encryptionBytes = ENCRYPTION_STRING_KEY.getBytes();
         cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         secret = new SecretKeySpec(encryptionBytes, "AES");
-
+        packetQueue =new ConcurrentLinkedDeque<>();
+        start();
     }
 
     public static void queue_accept(Packet p){
@@ -81,7 +80,7 @@ public class MessageEncryptor extends Thread implements Encryptor {
                 if (packet != null) {
                     byte[] encoded = encode(packet);
                     System.out.println("Encoded: " + encoded);
-                    FakeSender.queue_accept(encoded);
+                    TCPSender.sender_accept(encoded);
                 }
             } catch (Exception e) { e.printStackTrace(); }
         }
