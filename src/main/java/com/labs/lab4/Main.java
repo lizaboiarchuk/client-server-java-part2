@@ -1,7 +1,5 @@
 package com.labs.lab4;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,12 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/shop", "user", "PASSWORD");
-            Service service = new Service(conn);
-            service.createTable();
-            service.clearTable();
-            printProducts(service.readProducts());
+            DBService service = new DBService("localhost", 3306, "shop", "user", "PASSWORD");
 
             // create products
             service.createProduct("Milk", 3, 25.99, "Dairy");
